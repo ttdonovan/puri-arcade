@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://6t07ti0y5uqf"]
+
+[ext_resource type="Texture2D" uid="uid://ch83w3fn0plnf" path="res://assets/ship.png" id="1_i00fg"]
+[ext_resource type="Script" path="res://components/move_component.gd" id="2_qoelx"]
+[ext_resource type="Script" path="res://components/move_input_component.gd" id="3_4evc7"]
+[ext_resource type="Resource" uid="uid://dco53d02dfe60" path="res://player_ship/ship_move_stats.tres" id="4_wshwj"]
+[ext_resource type="Script" path="res://components/position_clamp_component.gd" id="5_36f37"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4b22w"]
+atlas = ExtResource("1_i00fg")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pimf4"]
+atlas = ExtResource("1_i00fg")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f14m6"]
+atlas = ExtResource("1_i00fg")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2roj0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4b22w")
+}],
+"loop": true,
+"name": &"bank_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pimf4")
+}],
+"loop": true,
+"name": &"bank_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f14m6")
+}],
+"loop": true,
+"name": &"center",
+"speed": 5.0
+}]
+
+[node name="Ship" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_2roj0")
+animation = &"center"
+autoplay = "center"
+
+[node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("2_qoelx")
+actor = NodePath("..")
+
+[node name="MoveInputComponent" type="Node" parent="." node_paths=PackedStringArray("move_component")]
+script = ExtResource("3_4evc7")
+move_stats = ExtResource("4_wshwj")
+move_component = NodePath("../MoveComponent")
+
+[node name="PositionClampComponent" type="Node2D" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("5_36f37")
+actor = NodePath("..")
